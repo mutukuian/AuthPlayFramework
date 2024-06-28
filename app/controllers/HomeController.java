@@ -1,6 +1,5 @@
 package controllers;
 
-
 import models.Login;
 import play.data.validation.ValidationError;
 import play.i18n.MessagesApi;
@@ -12,11 +11,9 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import play.libs.concurrent.HttpExecutionContext;
 import play.data.FormFactory;
 import play.data.Form;
-
 
 @Singleton
 public class HomeController extends Controller {
@@ -24,10 +21,10 @@ public class HomeController extends Controller {
     private final Form<Login> loginForm;
     private final HttpExecutionContext ec;
     private final FormFactory formFactory;
-    private MessagesApi messagesApi;
+    private final MessagesApi messagesApi;
 
     @Inject
-    public HomeController( HttpExecutionContext ec, FormFactory formFactory, MessagesApi messagesApi) {
+    public HomeController(HttpExecutionContext ec, FormFactory formFactory, MessagesApi messagesApi) {
         this.loginForm = formFactory.form(Login.class);
         this.ec = ec;
         this.formFactory = formFactory;
@@ -56,11 +53,18 @@ public class HomeController extends Controller {
             Form<User> boundForm1 = boundForm.withError(new ValidationError("password", errs, new ArrayList<>()));
             return badRequest(views.html.register.render(boundForm1, request, messagesApi.preferred(request)));
         }
-        user.setPassword(user.getPassword());
+
+        // Check for existing email
+        User existingUser = User.find.query().where().eq("email", user.getEmail()).findOne();
+        if (existingUser != null) {
+            boundForm = boundForm.withError(new ValidationError("email", "Email is already taken"));
+            return badRequest(views.html.register.render(boundForm, request, messagesApi.preferred(request)));
+        }
+
+        user.setPassword(user.getPassword()); // Hash the password
         user.save();
 
         return redirect(routes.HomeController.register()).flashing("success", "User successfully registered");
-
     }
 
 
@@ -76,15 +80,13 @@ public class HomeController extends Controller {
         Login login = boundForm.get();
         User user = User.find.query().where().eq("email", login.getEmail()).findOne();
 
-        if (user == null || !user.getPassword().equals(login.getPassword())) {
+        if (user == null || !user.checkPassword(login.getPassword())) {
             boundForm = boundForm.withError(new ValidationError("email", "Invalid email or password"));
             return badRequest(views.html.login.render(boundForm, request, messagesApi.preferred(request)));
         }
         // Set the user session, or any other logic you want after successful login
         return redirect(routes.HomeController.index()).flashing("success", "Logged in successfully");
     }
-
-
 
 
     public Result forgotPassword() {

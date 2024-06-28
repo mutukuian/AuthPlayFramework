@@ -3,6 +3,7 @@ package models;
 
 import io.ebean.Finder;
 import io.ebean.Model;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -17,6 +18,7 @@ public class User extends Model {
     private String username;
 
     @Constraints.Required(message = "email required")
+    @Column(unique = true)
     private String email;
 
     @Constraints.Required(message = "password required")

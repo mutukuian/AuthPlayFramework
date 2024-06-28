@@ -1,8 +1,8 @@
 package models;
 
-
 import io.ebean.Finder;
 import io.ebean.Model;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import play.data.validation.Constraints;
@@ -11,6 +11,7 @@ import play.data.validation.Constraints;
 @Table(name = "users")
 public class Login extends Model {
     @Constraints.Required(message = "email required")
+    @Column(unique = true)
     private String email;
 
     @Constraints.Required(message = "password required")
