@@ -1,4 +1,6 @@
-@()
+@import play.mvc.Http.Request
+@import helper._
+@(loginForm: Form[models.Login])(implicit request: Request, messages: play.i18n.Messages)
 
 @main("Login") {
 
@@ -6,17 +8,29 @@
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
   <div class="login-container">
     <h2 class="text-center">Login</h2>
-    <form action="/login" method="post">
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">Login</button>
-    </form>
+    @form(routes.HomeController.handleLogin()) {
+    @CSRF.formField
+    <div class="form-group">
+      <label for="email">Email:</label>
+      @inputText(loginForm("email"),
+      Symbol("_showConstraints") -> false,
+      Symbol("_label") -> Nil,
+      Symbol("type") -> "email",
+      Symbol("placeholder") -> "Enter email",
+      Symbol("class") -> "form-control",
+      Symbol("autofocus") -> false)
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      @inputPassword(loginForm("password"),
+      Symbol("_showConstraints") -> false,
+      Symbol("_label") -> Nil,
+      Symbol("placeholder") -> "Enter password",
+      Symbol("class") -> "form-control",
+      Symbol("autofocus") -> false)
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Login</button>
+    }
 
     <div class="text-center mt-3">
       <p>Don't have an account? <a href="/register">Register here</a></p>

@@ -1,20 +1,25 @@
-name := """play-java-seed"""
-organization := "com.playlearn"
+import play.sbt.PlayImport.*
 
+name := "play-java-seed"
+organization := "com.play learn"
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayJava,PlayEbean)
 
 scalaVersion := "2.13.14"
-
-// Add the necessary dependencies
-libraryDependencies +=guice
+playEbeanVersion := "8.2.0"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-json" % "2.10.5",
-  "com.typesafe.play" %% "play-ws" % "2.9.4"
+  guice,
+  ehcache,
+  "com.mysql" % "mysql-connector-j" % "8.4.0",
+  javaJdbc,
+  jdbc,
+  javaWs,
+  "ch.qos.logback" % "logback-classic" % "1.5.6",
+  "ch.qos.logback" % "logback-core" % "1.5.6",
+  "ch.qos.logback" % "logback-access" % "1.4.14"
 )
 
-libraryDependencies += ws
-
-
+Compile / playEbeanModels := Seq("models.*")
