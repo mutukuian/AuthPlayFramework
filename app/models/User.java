@@ -5,6 +5,7 @@ import io.ebean.Finder;
 import io.ebean.Model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import play.data.validation.Constraints;
 
 @Entity
@@ -27,7 +28,7 @@ public class User extends Model {
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.password = hashPassword(password) ;
     }
 
     public static final Finder<Integer, User> find = new Finder<>(User.class);
@@ -62,7 +63,15 @@ public class User extends Model {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = hashPassword(password);
+    }
+    // Hash the password using BCrypt
+    private String hashPassword(String plainTextPassword) {
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
+    // Check if the provided password matches the hashed password
+    public boolean checkPassword(String plainTextPassword) {
+        return BCrypt.checkpw(plainTextPassword, this.password);
     }
 }
 

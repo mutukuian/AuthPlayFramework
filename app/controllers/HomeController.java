@@ -22,7 +22,6 @@ import play.data.Form;
 public class HomeController extends Controller {
     Form<User> userForm;
     private final Form<Login> loginForm;
-
     private final HttpExecutionContext ec;
     private final FormFactory formFactory;
     private MessagesApi messagesApi;
@@ -57,6 +56,7 @@ public class HomeController extends Controller {
             Form<User> boundForm1 = boundForm.withError(new ValidationError("password", errs, new ArrayList<>()));
             return badRequest(views.html.register.render(boundForm1, request, messagesApi.preferred(request)));
         }
+        user.setPassword(user.getPassword());
         user.save();
 
         return redirect(routes.HomeController.register()).flashing("success", "User successfully registered");

@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   javaWs,
   "ch.qos.logback" % "logback-classic" % "1.5.6",
   "ch.qos.logback" % "logback-core" % "1.5.6",
-  "ch.qos.logback" % "logback-access" % "1.4.14"
+  "ch.qos.logback" % "logback-access" % "1.4.14",
+  "org.springframework.security" % "spring-security-crypto" % "5.7.3"
 )
 
 Compile / playEbeanModels := Seq("models.*")
