@@ -7,45 +7,49 @@
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
     <div class="register-container">
         <h2 class="text-center">Register</h2>
+
+        @* Display the flash message if it exists *@
+        @request.flash().get("success").map { successMessage =>
+        <div class="alert alert-success" role="alert" id="success-alert">
+            @successMessage
+        </div>
+        }
+
         @form(routes.HomeController.handleRegister()) {
         @CSRF.formField
-            <div class="form-group mb-3">
-                <label for="username">Username:</label>
-                @inputText(registerForm("username"),
-                Symbol("_showConstraints") -> false,
-                Symbol("_label") -> Nil,
-                Symbol("placeholder") -> "Enter username",
-                Symbol("class") -> "form-control",
-                Symbol("autofocus") -> true)
-<!--                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>-->
-            </div>
-            <div class="form-group mb-3">
-                <label for="email">Email:</label>
-                @inputText(registerForm("email"),
-                Symbol("_showConstraints") -> false,
-                Symbol("_label") -> Nil,
-                Symbol("type") -> "email",
-                Symbol("placeholder") -> "Enter email",
-                Symbol("class") -> "form-control",
-                Symbol("autofocus") -> false)
-<!--                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>-->
-            </div>
-            <div class="form-group mb-3">
-                <label for="password">Password:</label>
-                @inputPassword(registerForm("password"),
-                Symbol("_showConstraints") -> false,
-                Symbol("_label") -> Nil,
-                Symbol("placeholder") -> "Enter password",
-                Symbol("class") -> "form-control",
-                Symbol("autofocus") -> false)
-
-<!--                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>-->
-            </div>
-            <div class="form-group mb-3">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <div class="form-group mb-3">
+            <label for="username">Username:</label>
+            @inputText(registerForm("username"),
+            Symbol("_showConstraints") -> false,
+            Symbol("_label") -> Nil,
+            Symbol("placeholder") -> "Enter username",
+            Symbol("class") -> "form-control",
+            Symbol("autofocus") -> true)
+        </div>
+        <div class="form-group mb-3">
+            <label for="email">Email:</label>
+            @inputText(registerForm("email"),
+            Symbol("_showConstraints") -> false,
+            Symbol("_label") -> Nil,
+            Symbol("type") -> "email",
+            Symbol("placeholder") -> "Enter email",
+            Symbol("class") -> "form-control",
+            Symbol("autofocus") -> false)
+        </div>
+        <div class="form-group mb-3">
+            <label for="password">Password:</label>
+            @inputPassword(registerForm("password"),
+            Symbol("_showConstraints") -> false,
+            Symbol("_label") -> Nil,
+            Symbol("placeholder") -> "Enter password",
+            Symbol("class") -> "form-control",
+            Symbol("autofocus") -> false)
+        </div>
+        <div class="form-group mb-3">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
         }
 
         <div class="text-center mt-3">
@@ -53,5 +57,16 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    window.onload = function() {
+        var successAlert = document.getElementById('success-alert');
+        if (successAlert) {
+            setTimeout(function() {
+                successAlert.style.display = 'none';
+            }, 10000); // 10000 milliseconds = 10 seconds
+        }
+    }
+</script>
 </body>
 }

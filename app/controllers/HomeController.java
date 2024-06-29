@@ -61,7 +61,7 @@ public class HomeController extends Controller {
             return badRequest(views.html.register.render(boundForm, request, messagesApi.preferred(request)));
         }
 
-        user.setPassword(user.getPassword()); // Hash the password
+        user.setPassword(user.getPassword());
         user.save();
 
         return redirect(routes.HomeController.register()).flashing("success", "User successfully registered");
