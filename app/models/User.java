@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import play.data.validation.Constraints;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "users")
 public class User extends Model {
@@ -23,6 +25,20 @@ public class User extends Model {
 
     @Constraints.Required(message = "password required")
     private String password;
+
+    @Column(nullable = true)
+    private String resetToken;
+
+    @Column(nullable = true)
+    private Long resetTokenExpiry;
+
+    public Long getResetTokenExpiry() {
+        return resetTokenExpiry;
+    }
+
+    public void setResetTokenExpiry(Long resetTokenExpiry) {
+        this.resetTokenExpiry = resetTokenExpiry;
+    }
 
     // Constructors
     public User() {}
@@ -67,6 +83,30 @@ public class User extends Model {
     public void setPassword(String password) {
         this.password = hashPassword(password);
     }
+
+    // Getter and setter for resetToken
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public void generateResetToken() {
+        this.resetToken = UUID.randomUUID().toString();
+        this.resetTokenExpiry = System.currentTimeMillis() + 3600000; // 1 hour expiry
+    }
+
+    public boolean isResetTokenValid() {
+        return resetToken != null && resetTokenExpiry > System.currentTimeMillis();
+    }
+
+    public void clearResetToken() {
+        this.resetToken = null;
+        this.resetTokenExpiry = null;
+    }
+
     // Hash the password using BCrypt
     private String hashPassword(String plainTextPassword) {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());

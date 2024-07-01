@@ -86,3 +86,55 @@ body {
         .forgot-password-container input[type="submit"]:hover {
             background-color: #45a049;
         }
+
+
+.sidebar {
+    width: 250px;
+    position:absolute;
+    height: 1000px;
+    margin-left:-110px;
+    top:-10px;
+    background-color: #E1E7F6;
+    padding: 15px;
+}
+
+.main-content {
+    flex-grow: 1;
+    font-family: 'Josefin Sans', sans-serif;
+    padding: 15px;
+}
+
+h2 {
+    font-size: 1.5em;
+    font-family: 'Josefin Sans', sans-serif;
+    margin-bottom: 10px;
+    margin-left:50px;
+
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    font-family: 'Josefin Sans', sans-serif;
+    margin-bottom: 10px;
+    margin-top:50px;
+    margin-left:50px;
+}
+li i {
+    margin-right: 10px;
+}
+.main-content{
+position:absolute;
+margin-top:-40px;
+margin-left:280px;
+}
+
+.profile-circle img {
+    width: 30px;
+    height: 30px;
+    margin-left:1700px;
+    object-fit: cover; /* Ensure the image fits within the circle */
+}

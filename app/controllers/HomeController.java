@@ -32,8 +32,8 @@ public class HomeController extends Controller {
         this.messagesApi = messagesApi;
     }
 
-    public Result index(Http.Request request) {
-        return ok(views.html.login.render(loginForm, request, messagesApi.preferred(request)));
+    public Result index() {
+        return ok(views.html.dashboard.render());
     }
 
     public Result register(Http.Request request) {
@@ -43,7 +43,7 @@ public class HomeController extends Controller {
     public Result handleRegister(Http.Request request) {
         Form<User> boundForm = userForm.bindFromRequest(request);
         String confirmPassword = formFactory.form().bindFromRequest(request).get("confirm_password");
-        if(boundForm.hasErrors()) {
+        if (boundForm.hasErrors()) {
             return badRequest(views.html.register.render(boundForm, request, messagesApi.preferred(request)));
         }
         User user = boundForm.get();
@@ -97,4 +97,5 @@ public class HomeController extends Controller {
         // handle forgot password logic here
         return redirect(routes.HomeController.index());
     }
+
 }

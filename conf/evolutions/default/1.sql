@@ -58,6 +58,8 @@ create table users (
   username                      varchar(255),
   email                         varchar(255),
   password                      varchar(255),
+  reset_token                   varchar(255),
+  reset_token_expiry            bigint,
   constraint uq_users_email unique (email)
 );
 
