@@ -1,7 +1,4 @@
-# Routes file
-# Higher priority routes first
-
-GET     /                           controllers.HomeController.index()
+GET     /                           controllers.HomeController.index(request: play.mvc.Http.Request)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
@@ -17,3 +14,6 @@ POST    /login                      controllers.HomeController.handleLogin(reque
 # Forgot Password page
 GET     /forgot-password            controllers.HomeController.forgotPassword()
 POST    /forgot-password            controllers.HomeController.handleForgotPassword()
+
+# Dashboard page
+GET     /dashboard                  controllers.HomeController.dashboard(request: play.mvc.Http.Request)

@@ -32,8 +32,8 @@ public class HomeController extends Controller {
         this.messagesApi = messagesApi;
     }
 
-    public Result index() {
-        return ok(views.html.dashboard.render());
+    public Result index(Http.Request request) {
+        return ok(views.html.login.render(loginForm, request, messagesApi.preferred(request)));
     }
 
     public Result register(Http.Request request) {
@@ -85,8 +85,13 @@ public class HomeController extends Controller {
             return badRequest(views.html.login.render(boundForm, request, messagesApi.preferred(request)));
         }
         // Set the user session, or any other logic you want after successful login
-        return redirect(routes.HomeController.index()).flashing("success", "Logged in successfully");
+        return redirect(routes.HomeController.dashboard()).flashing("success", "Logged in successfully");
     }
+
+    public Result dashboard(Http.Request request) {
+        return ok(views.html.dashboard.render());
+    }
+
 
 
     public Result forgotPassword() {
