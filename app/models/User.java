@@ -1,6 +1,5 @@
 package models;
 
-
 import io.ebean.Finder;
 import io.ebean.Model;
 import jakarta.persistence.Column;
@@ -9,7 +8,7 @@ import jakarta.persistence.Table;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import play.data.validation.Constraints;
 
-
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -24,8 +23,8 @@ public class User extends Model {
     private String email;
 
     @Constraints.Required(message = "password required")
+    @PasswordValidation
     private String password;
-
 
     // Constructors
     public User() {}
@@ -33,7 +32,7 @@ public class User extends Model {
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
-        this.password = hashPassword(password) ;
+        this.password = hashPassword(password);
     }
 
     public static final Finder<Integer, User> find = new Finder<>(User.class);
@@ -71,16 +70,21 @@ public class User extends Model {
         this.password = hashPassword(password);
     }
 
-
-
-
     // Hash the password using BCrypt
     private String hashPassword(String plainTextPassword) {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
     }
+
     // Check if the provided password matches the hashed password
     public boolean checkPassword(String plainTextPassword) {
         return BCrypt.checkpw(plainTextPassword, this.password);
     }
-}
 
+    // Method to validate email format using a regular expression
+    public boolean isValidEmailFormat(String email) {
+        // Regular expression for a basic email format
+        String emailRegex = "^[a-z0-9_+&-]+(?:\\.[a-z0-9_+&-]+)*@(?:[a-z0-9-]+\\.)+[a-z]{2,7}$\n";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
+}

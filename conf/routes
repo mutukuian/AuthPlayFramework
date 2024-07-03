@@ -17,3 +17,6 @@ POST    /forgot-password            controllers.HomeController.handleForgotPassw
 
 # Dashboard page
 GET     /dashboard                  controllers.HomeController.dashboard(request: play.mvc.Http.Request)
+
+# Logout
+GET     /logout                     controllers.HomeController.logout()

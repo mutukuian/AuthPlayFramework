@@ -5,6 +5,7 @@ import play.data.validation.ValidationError;
 import play.i18n.MessagesApi;
 import play.mvc.*;
 import models.User;
+import models.PasswordValidator;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,7 +18,7 @@ import play.data.Form;
 
 @Singleton
 public class HomeController extends Controller {
-    Form<User> userForm;
+    private final Form<User> userForm;
     private final Form<Login> loginForm;
     private final HttpExecutionContext ec;
     private final FormFactory formFactory;
@@ -43,10 +44,19 @@ public class HomeController extends Controller {
     public Result handleRegister(Http.Request request) {
         Form<User> boundForm = userForm.bindFromRequest(request);
         String confirmPassword = formFactory.form().bindFromRequest(request).get("confirm_password");
+
         if (boundForm.hasErrors()) {
             return badRequest(views.html.register.render(boundForm, request, messagesApi.preferred(request)));
         }
+
         User user = boundForm.get();
+
+        // Validate email format
+        if (!user.isValidEmailFormat(user.getEmail())) {
+            boundForm = boundForm.withError(new ValidationError("email", "Invalid email format"));
+            return badRequest(views.html.register.render(boundForm, request, messagesApi.preferred(request)));
+        }
+
         if (!user.getPassword().equals(confirmPassword)) {
             List<String> errs = new ArrayList<>();
             errs.add("Passwords do not match");
@@ -92,8 +102,6 @@ public class HomeController extends Controller {
         return ok(views.html.dashboard.render());
     }
 
-
-
     public Result forgotPassword() {
         return ok(views.html.forgotPassword.render(""));
     }
@@ -103,4 +111,7 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.index());
     }
 
+    public Result logout() {
+        return redirect(routes.HomeController.index()).withNewSession().flashing("success", "You have been logged out");
+    }
 }
