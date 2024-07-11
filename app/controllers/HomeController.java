@@ -1,3 +1,4 @@
+
 package controllers;
 
 import models.Login;
@@ -89,12 +90,12 @@ public class HomeController extends Controller {
             return badRequest(views.html.login.render(boundForm, request, messagesApi.preferred(request)));
         }
         return redirect(routes.HomeController.dashboard()).flashing("success", "Logged in successfully")
-                .addingToSession(request, "userId", user.getId().toString());
+                .addingToSession(request, "userId", user.getId().toString()).addingToSession(request, "username", user.getUsername());
     }
 
     @Authenticated
     public Result dashboard(Http.Request request) {
-        return ok(views.html.dashboard.render());
+        return ok(views.html.dashboard.render(request));
     }
 
     public Result forgotPassword() {

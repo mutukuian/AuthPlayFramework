@@ -1,3 +1,5 @@
+@import play.mvc.Http.Request;
+@()(implicit request: Request)
 @main("dashboard"){
 <!DOCTYPE html>
 <html>
@@ -25,7 +27,7 @@
         <div class="profile-circle">
             <img src="@routes.Assets.versioned("images/profile.jpeg")">
         </div>
-        <p class="profile-name">Ian</p>
+        <p class="profile-name">@request.session().get("username").orElse("Username")</p>
     </nav>
 </div>
 </body>
