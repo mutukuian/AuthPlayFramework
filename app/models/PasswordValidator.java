@@ -1,48 +1,34 @@
 package models;
 
-import play.data.validation.Constraints;
-import play.libs.F;
-import play.libs.F.Tuple;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-public class PasswordValidator extends Constraints.Validator<String> {
-    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#]).{8,}$";
-    private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+public class PasswordValidator implements ConstraintValidator<PasswordValidation, String> {
 
     @Override
-    public boolean isValid(String password) {
-        return password != null && pattern.matcher(password).matches();
+    public void initialize(PasswordValidation constraintAnnotation) {
     }
 
     @Override
-    public F.Tuple<String, Object[]> getErrorMessageKey() {
-        return new Tuple<>("error.password", new Object[]{});
-    }
+    public boolean isValid(String password, ConstraintValidatorContext context) {
+        if (password == null || password.length() < 6) {
+            return false;
+        }
 
-    public static List<String> getDetailedErrors(String password) {
-        List<String> errors = new ArrayList<>();
-        if (password == null) {
-            errors.add("Password is required");
-            return errors;
+        boolean hasUppercase = false;
+        boolean hasLowercase = false;
+        boolean hasSpecialChar = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUppercase = true;
+            } else if (Character.isLowerCase(c)) {
+                hasLowercase = true;
+            } else if (!Character.isLetterOrDigit(c)) {
+                hasSpecialChar = true;
+            }
         }
-        if (password.length() < 8) {
-            errors.add("Password must be at least 8 characters long");
-        }
-        if (!Pattern.compile("[A-Z]").matcher(password).find()) {
-            errors.add("Password must contain at least one uppercase letter");
-        }
-        if (!Pattern.compile("[a-z]").matcher(password).find()) {
-            errors.add("Password must contain at least one lowercase letter");
-        }
-        if (!Pattern.compile("\\d").matcher(password).find()) {
-            errors.add("Password must contain at least one digit");
-        }
-        if (!Pattern.compile("[@$!%*?&#]").matcher(password).find()) {
-            errors.add("Password must contain at least one special character (@$!%*?&#)");
-        }
-        return errors;
+
+        return hasUppercase && hasLowercase && hasSpecialChar;
     }
 }

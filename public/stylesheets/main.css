@@ -90,7 +90,7 @@ body {
     width: 250px;
     position:absolute;
     height: 1000px;
-    margin-left:-110px;
+    margin-left:-310px;
     top:-10px;
     background-color: #E1E7F6;
     padding: 15px;
@@ -135,4 +135,29 @@ body {
     body > div > div.sidebar > a{
     position:absolute;
     margin-top:150px;
-    margin-left:48px;}
+    margin-left:48px;
+    }
+
+    .navbar{
+    position:absolute;
+    width: 1900px;
+    top:0px;
+    height: 80px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left:-60px;
+    }
+
+    .navbar > h2:nth-child(1){
+    margin-top: 5px;
+    }
+    body > div > nav > div{
+    position:absolute;
+    left:-100px;
+    }
+    body > div > nav > p{
+    position:absolute;
+    top:30px;
+        left:1550px;
+    }

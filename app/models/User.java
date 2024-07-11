@@ -83,7 +83,7 @@ public class User extends Model {
     // Method to validate email format using a regular expression
     public boolean isValidEmailFormat(String email) {
         // Regular expression for a basic email format
-        String emailRegex = "^[a-z0-9_+&-]+(?:\\.[a-z0-9_+&-]+)*@(?:[a-z0-9-]+\\.)+[a-z]{2,7}$\n";
+        String emailRegex = "^[a-z0-9_+&-]+(?:\\.[a-z0-9_+&-]+)*@(?:[a-z0-9-]+\\.)+[a-z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
         return pattern.matcher(email).matches();
     }
